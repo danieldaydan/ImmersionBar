@@ -16,6 +16,7 @@ public class OSUtils {
     private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
     private static final String KEY_EMUI_VERSION_NAME = "ro.build.version.emui";
     private static final String KEY_DISPLAY = "ro.build.display.id";
+    private static final String KEY_VERSION_OPPO_NAME = "ro.build.version.opporom";
 
     /**
      * 判断是否为miui
@@ -56,6 +57,48 @@ public class OSUtils {
      */
     public static String getMIUIVersion() {
         return isMIUI() ? getSystemProperty(KEY_MIUI_VERSION_NAME, "") : "";
+    }
+
+    /**
+     * 判断是否为ColorOS
+     * Is ColorOS boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isColorOS() {
+        String property = getSystemProperty(KEY_VERSION_OPPO_NAME, "");
+        return !TextUtils.isEmpty(property);
+    }
+
+    /**
+     * 获得ColorOS的版本
+     * Gets ColorOS version.
+     *
+     * @return the miui version
+     */
+    public static String getColorOSVersion() {
+        return isColorOS() ? getSystemProperty(KEY_VERSION_OPPO_NAME, "") : "";
+    }
+
+
+    /**
+     * 判断ColorOS版本是否大于等于3
+     * Is ColorOS 3 later boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isColorOS3Later() {
+        String version = getColorOSVersion();
+        int num;
+        if ((!TextUtils.isEmpty(version))) {
+            try {
+                num = Integer.valueOf(version.substring(1,2));
+                return num >= 3;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        } else
+            return false;
     }
 
     /**

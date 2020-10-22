@@ -369,6 +369,11 @@ public final class ImmersionBar implements ImmersionCallback {
                 SpecialBarFontUtils.setStatusBarDarkIcon(mActivity, mBarParams.statusBarDarkFont);
             }
         }
+
+        // 修改Color OS状态栏字体颜色
+        if (OSUtils.isColorOS3Later()) {
+            SpecialBarFontUtils.setColorOSBarDark(mActivity, mBarParams.statusBarDarkFont);
+        }
     }
 
     /**
@@ -967,7 +972,7 @@ public final class ImmersionBar implements ImmersionCallback {
      * @return the boolean
      */
     public static boolean isSupportStatusBarDarkFont() {
-        return OSUtils.isMIUI6Later() || OSUtils.isFlymeOS4Later()
+        return OSUtils.isMIUI6Later() || OSUtils.isFlymeOS4Later() || OSUtils.isColorOS3Later()
                 || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M);
     }
 

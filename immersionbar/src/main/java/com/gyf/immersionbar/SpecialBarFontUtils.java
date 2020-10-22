@@ -3,6 +3,7 @@ package com.gyf.immersionbar;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,6 +23,7 @@ class SpecialBarFontUtils {
     private static Method mSetStatusBarDarkIcon;
     private static Field mStatusBarColorFiled;
     private static int SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 0;
+    private static final int SYSTEM_UI_FLAG_OP_STATUS_BAR_TINT = 0x00000010;
 
     static {
         try {
@@ -251,5 +253,27 @@ class SpecialBarFontUtils {
 
             }
         }
+    }
+
+    //设置ColorOS 状态栏深色浅色切换
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    static void setColorOSBarDark(Activity activity, boolean dark) {
+        Window window = activity.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        int vis = window.getDecorView().getSystemUiVisibility();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (dark) {
+                vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            } else {
+                vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (dark) {
+                vis |= SYSTEM_UI_FLAG_OP_STATUS_BAR_TINT;
+            } else {
+                vis &= ~SYSTEM_UI_FLAG_OP_STATUS_BAR_TINT;
+            }
+        }
+        window.getDecorView().setSystemUiVisibility(vis);
     }
 }
